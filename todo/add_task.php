@@ -7,7 +7,7 @@ if (isset($_POST['add'])) {
         $task = $_POST['task'];
 
         $addtasks = mysqli_query($db, 
-            "INSERT INTO `task` VALUES('', '$task', 'Pending')")
+            "INSERT INTO `task` (`task`, `status`) VALUES ('$task', 'Pending')")
             or
             die(mysqli_error($db));
         header('location:index.php');
