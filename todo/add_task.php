@@ -3,14 +3,19 @@
 <?php
 require_once 'config.php';
 if (isset($_POST['add'])) {
-    if ($_POST['task'] != "") {
+    if (!empty($_POST['task'])) {
         $task = $_POST['task'];
 
-        $addtasks = mysqli_query($db, 
-            "INSERT INTO `task` (`task`, `status`) VALUES ('$task', 'Pending')")
-            or
-            die(mysqli_error($db));
+        try {
+            $stmt = $db->prepare("INSERT INTO task (task, status) VALUES (:task, 'Pending')");
+            $stmt->bindParam(':task', $task);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            die("Error adding task: " . $e->getMessage());
+        }
+
         header('location:index.php');
     }
 }
+
 ?>

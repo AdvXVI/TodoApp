@@ -34,20 +34,20 @@
         <?php
                 require 'config.php';
                 $fetchingtasks = 
-mysqli_query($db, "SELECT * FROM `task` ORDER BY `task_id` ASC")
-or die(mysqli_error($db));
+pg_query($db, "SELECT * FROM `task` ORDER BY `task_id` ASC")
+or die(pg_error($db));
                 $count = 1;
-                while ($fetch = $fetchingtasks->fetch_array()) {
+                while ($fetch = pg_fetch_assoc($fetchingtasks)) {
                     ?>
         <tr class="border-bottom">
           <td>
             <?php echo $count++ ?>
           </td>
           <td>
-            <?php echo $fetch['task'] ?>
+            <?php echo htmlspecialchars($fetch['task']) ?>
           </td>
           <td>
-            <?php echo $fetch['status'] ?>
+            <?php echo htmlspecialchars($fetch['status']) ?>
           </td>
           <td colspan="2" class="action">
             <?php

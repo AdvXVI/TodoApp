@@ -3,14 +3,17 @@
 <?php
 require_once 'config.php';
 
-if ($_GET['task_id'] != "") {
+if (isset($_GET['task_id']) && $_GET['task_id'] != "") {
     $task_id = $_GET['task_id'];
 
-    $updatingtasks = 
-          mysqli_query($db, 
-            "UPDATE `task` SET `status` = 'Done' WHERE `task_id` = $task_id")
-        or
-        die(mysqli_error($db));
-    header('location: index.php');
+    // Using PostgreSQL's query with parameterized statement
+    $query = "UPDATE task SET status = 'Done' WHERE task_id = $1";
+    $result = pg_query_params($db, $query, array($task_id));
+
+    if (!$result) {
+        die("Error in query execution: " . pg_last_error($db));
+    }
+
+    header('Location: index.php');
 }
 ?>

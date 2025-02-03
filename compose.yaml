@@ -1,30 +1,18 @@
 version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0  # Use MySQL 8 or your version
-    container_name: mysql_container
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: todo  # Ensure this matches your SQL dump
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin_container
-    restart: always
-    ports:
-      - "8080:80"
-    environment:
-      PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
-
+  postgres:
+      image: postgres:13 # Use a PostgreSQL image
+      container_name: postgres_container
+      environment:
+        POSTGRES_USER: user
+        POSTGRES_PASSWORD: password
+        POSTGRES_DB: todo
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      ports:
+        - "5432:5432" # Default PostgreSQL port
+        
   php_app:
     build: .
     container_name: php_app_container
@@ -34,7 +22,7 @@ services:
     volumes:
       - ./todo:/var/www/html
     depends_on:
-      - mysql
+      - postgres
 
 volumes:
-  mysql_data:
+  postgres_data:

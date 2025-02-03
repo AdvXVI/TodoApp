@@ -42,8 +42,9 @@ FROM php:8.2-apache
 
 # Use the default production configuration for PHP runtime arguments, see
 # https://github.com/docker-library/docs/tree/master/php#configuration
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get update && apt-get install -y libpq-dev
 
+RUN docker-php-ext-install pdo pdo_pgsql
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 

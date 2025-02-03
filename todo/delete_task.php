@@ -3,14 +3,17 @@
 <?php
 require_once 'config.php';
 
-if ($_GET['task_id']) {
+if (isset($_GET['task_id'])) {
     $task_id = $_GET['task_id'];
 
-    $deletingtasks = mysqli_query($db, 
-        "DELETE FROM `task` WHERE `task_id` = $task_id")
-        or
-        die(mysqli_error($db));
+    // Using PostgreSQL's query with parameterized statement
+    $query = "DELETE FROM task WHERE task_id = $1";
+    $result = pg_query_params($db, $query, array($task_id));
 
-    header("location: index.php");
+    if (!$result) {
+        die("Error in query execution: " . pg_last_error($db));
+    }
+
+    header("Location: index.php");
 }
 ?>
