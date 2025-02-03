@@ -1,18 +1,6 @@
 version: '3.8'
 
-services:
-  postgres:
-      image: postgres:13 # Use a PostgreSQL image
-      container_name: postgres_container
-      environment:
-        POSTGRES_USER: user
-        POSTGRES_PASSWORD: password
-        POSTGRES_DB: todo
-      volumes:
-        - postgres_data:/var/lib/postgresql/data
-      ports:
-        - "5432:5432" # Default PostgreSQL port
-        
+services:    
   php_app:
     build: .
     container_name: php_app_container
@@ -21,8 +9,4 @@ services:
       - "8000:80"
     volumes:
       - ./todo:/var/www/html
-    depends_on:
-      - postgres
 
-volumes:
-  postgres_data:

@@ -32,42 +32,31 @@
       </thead>
       <tbody>
         <?php
-                require 'config.php';
-                $fetchingtasks = 
-pg_query($db, "SELECT * FROM `task` ORDER BY `task_id` ASC")
-or die(pg_error($db));
-                $count = 1;
-                while ($fetch = pg_fetch_assoc($fetchingtasks)) {
-                    ?>
+        require 'config.php';
+
+        $stmt = $db->prepare("SELECT * FROM task ORDER BY task_id ASC");
+        $stmt->execute();
+        $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $count = 1;
+        foreach ($tasks as $fetch) {
+        ?>
         <tr class="border-bottom">
-          <td>
-            <?php echo $count++ ?>
-          </td>
-          <td>
-            <?php echo htmlspecialchars($fetch['task']) ?>
-          </td>
-          <td>
-            <?php echo htmlspecialchars($fetch['status']) ?>
-          </td>
+          <td><?php echo $count++ ?></td>
+          <td><?php echo $fetch['task'] ?></td>
+          <td><?php echo $fetch['status'] ?></td>
           <td colspan="2" class="action">
             <?php
-                if ($fetch['status'] != "Done")
-                {
-                    echo
-'<a href="update_task.php?task_id=' . $fetch['task_id'] . '" 
-class="btn-completed">✅</a>';
-                }
+            if ($fetch['status'] != "Done") {
+                echo '<a href="update_task.php?task_id=' . $fetch['task_id'] . '" class="btn-completed">✅</a>';
+            }
             ?>
-            <a href=
-"delete_task.php?task_id=<?php echo $fetch['task_id'] ?>" 
-               class="btn-remove">
-              ❌
-            </a>
+            <a href="delete_task.php?task_id=<?php echo $fetch['task_id'] ?>" class="btn-remove">❌</a>
           </td>
         </tr>
         <?php
-                }
-            ?>
+        }
+        ?>
       </tbody>
     </table>
   </div>

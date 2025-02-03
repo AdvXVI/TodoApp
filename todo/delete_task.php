@@ -3,17 +3,13 @@
 <?php
 require_once 'config.php';
 
-if (isset($_GET['task_id'])) {
+if ($_GET['task_id']) {
     $task_id = $_GET['task_id'];
 
-    // Using PostgreSQL's query with parameterized statement
-    $query = "DELETE FROM task WHERE task_id = $1";
-    $result = pg_query_params($db, $query, array($task_id));
+    $stmt = $db->prepare("DELETE FROM task WHERE task_id = :task_id");
+    $stmt->bindParam(':task_id', $task_id, PDO::PARAM_INT);
+    $stmt->execute();
 
-    if (!$result) {
-        die("Error in query execution: " . pg_last_error($db));
-    }
-
-    header("Location: index.php");
+    header("location: index.php");
 }
 ?>
