@@ -9,8 +9,4 @@ if (isset($_POST['add'])) {
         $addtasks = mysqli_query($db, 
             "INSERT INTO `task` (`task`, `status`) VALUES ('$task', 'Pending')")
             or
-            die(mysqli_error($db));
-        header('location:index.php');
-    }
-}
 ?>
