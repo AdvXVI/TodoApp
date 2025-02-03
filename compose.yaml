@@ -32,7 +32,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - .:/var/www/html
+      - ./todo:/var/www/html
     depends_on:
       - mysql
 
