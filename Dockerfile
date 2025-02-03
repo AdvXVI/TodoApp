@@ -8,7 +8,7 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-COPY . /var/www/html
+COPY ./ /var/www/html
 
 USER www-data
 
